@@ -4,9 +4,15 @@ package(default_visibility=["//visibility:public"])
 
 exports_files(["%{raw_binary}", "%{wrapper}"])
 
+sh_binary(
+    name = "binary",
+    srcs = ["%{wrapper}"],
+    data = ["%{raw_binary}"],
+)
+
 babashka_toolchain(
     name = "toolchain_impl",
-    binary = "%{wrapper}"
+    binary = ":binary"
 )
 
 toolchain(
