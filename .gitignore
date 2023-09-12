@@ -1,0 +1,28 @@
+.swp
+
+# I hate OS X
+.DS_Store
+
+# local config / IDE files
+/*.iml
+.idea
+/.vscode/
+/.calva/
+/.portal/
+/.clj-kondo/.cache
+/.clj-kondo/*
+!/.clj-kondo/config.edn
+/lsp/
+/.lsp/.cache
+/.cpcache
+/.config.edn
+
+# Bazel
+bazel-rules_babashka
+bazel-bin
+bazel-out
+bazel-testlogs
+creds.bazelrc
+
+# emacs related
+.*\#
