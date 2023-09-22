@@ -15,7 +15,8 @@ done
 SCRIPT_DIR="$(cd -P "$( dirname "${SOURCE}" )" >/dev/null && pwd)"
 RAW_BINARY_PATH="$(realpath "${SCRIPT_DIR}/../%{raw_binary}")"
 
-#export CLJ_CONFIG=.clojure
-#export DEPS_CLJ_TOOLS_DIR=.deps.clj
+export CLJ_CONFIG="%{repo_root}/.clojure"
+export DEPS_CLJ_TOOLS_DIR="%{repo_root}/.deps.clj/ClojureTools"
+export GITLIBS="%{repo_root}/.gitlibs"
 
 "${RAW_BINARY_PATH}" "${@}"

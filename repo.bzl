@@ -1,26 +1,37 @@
 load("//internal:common.bzl", "babashka_arch", "babashka_arch2platform_cpu", "babashka_os", "babashka2platform_os")
-load("//:releases.bzl", "RELEASES")
+load("//:releases.bzl", "BABASHKA", "CLOJURE_TOOLS", "TOOLS_MAPPING")
 
 EXTRACT_DIR = "bin/pkg"
 
 def _download_babashka(repository_ctx, arch, os):
     version = repository_ctx.attr.version
 
-    filename = "babashka-{version}-{os}-{arch}.tar.gz".format(
+    babashka_filename = "babashka-{version}-{os}-{arch}.tar.gz".format(
         version = version,
         os = os,
         arch = arch,
     )
 
-    url = "https://github.com/babashka/babashka/releases/download/v{version}/{filename}".format(
+    babashka_url = "https://github.com/babashka/babashka/releases/download/v{version}/{filename}".format(
         version = version,
-        filename = filename,
+        filename = babashka_filename,
     )
 
     repository_ctx.download_and_extract(
-        url = [url],
+        url = [babashka_url],
         output = EXTRACT_DIR,
-        sha256 = RELEASES[filename],
+        sha256 = BABASHKA[babashka_filename],
+    )
+
+    tools_version = TOOLS_MAPPING[version]
+    tools_url = "https://github.com/clojure/brew-install/releases/download/{version}/clojure-tools.zip".format(
+        version = tools_version,
+    )
+
+    repository_ctx.download_and_extract(
+        url = [tools_url],
+        output = ".deps.clj",
+        sha256 = CLOJURE_TOOLS[tools_version],
     )
 
 def _babashka_impl(repository_ctx):
@@ -36,7 +47,8 @@ def _babashka_impl(repository_ctx):
         "bin/bb",
         repository_ctx.attr._wrapper_script_template,
         substitutions = {
-            "%{raw_binary}": raw_binary
+            "%{repo_root}": repository_ctx.execute(["pwd"]).stdout.strip(),
+            "%{raw_binary}": raw_binary,
         },
     )
 
