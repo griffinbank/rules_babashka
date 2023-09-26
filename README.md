@@ -30,7 +30,7 @@ register_toolchains("@babashka-local//:toolchain")
 
 You can then use the `bb` binary within a `genrule` as a tool:
 
-```
+```skylark
 genrule(
     name = "bb-rule",
     srcs = ["bb.edn"],
@@ -44,7 +44,7 @@ genrule(
 
 If you need to use an alternate Babashka to the execution environment, to build into a deployment artifact, you can override the `arch` and `os`:
 
-```
+```skylark
 babashka(
     name = "babashka-linux-x86",
     arch = "amd64",
@@ -54,4 +54,29 @@ babashka(
 ```
 
 and then reference the `bb` binary from the alternate version.
+
+## Script dependencies
+
+Use the `babashka_deps_jar` rule within a `BUILD` file to generate a jar of all the dependencies referenced in `bb.edn`:
+
+```skylark
+load("@rules_babashka//deps:deps.bzl", "babashka_deps_jar")
+
+babashka_deps_jar(
+    name = "deps",
+    bb_edn = "bb.edn",
+)
+```
+
+The output will be called `{name}.jar`. If that's not suitable, it can be overridden with the `output` parameter:
+
+```skylark
+load("@rules_babashka//deps:deps.bzl", "babashka_deps_jar")
+
+babashka_deps_jar(
+    name = "deps-jar",
+    bb_edn = "bb.edn",
+    output = "deps.jar",
+)
+```
 
