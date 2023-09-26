@@ -1,23 +1,26 @@
 BabashkaInfo = provider(
     fields = {
-        "binary": "path to the binary"
+        "binary": "path to the wrapper that should be used for all in-Bazel actions",
+        "_pkg_binary": "path to the unmodified package binary",
     }
 )
 
 def _babashka_toolchain_impl(ctx):
-    bb = ctx.files.binary[0]
+    bb = ctx.file.binary
+    wrapper = ctx.files.wrapper[0]
 
     default_info = DefaultInfo(
-        files = depset([bb]),
-        runfiles = ctx.runfiles([bb])
+        files = depset([bb, wrapper]),
+        runfiles = ctx.runfiles([bb, wrapper]),
     )
 
     babashka_info = BabashkaInfo(
-        binary = bb
+        binary = wrapper,
+        _pkg_binary = bb,
     )
 
     template_variables = platform_common.TemplateVariableInfo({
-        "BB": bb.path
+        "BB": wrapper.path,
     })
 
     toolchain_info = platform_common.ToolchainInfo(
@@ -37,6 +40,10 @@ babashka_toolchain = rule(
     attrs = {
         "binary": attr.label(
             mandatory=True,
-        )
+            allow_single_file=True,
+        ),
+        "wrapper": attr.label(
+            mandatory=True,
+        ),
     }
 )

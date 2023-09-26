@@ -12,7 +12,8 @@ sh_binary(
 
 babashka_toolchain(
     name = "toolchain_impl",
-    binary = ":binary"
+    binary = "%{raw_binary}",
+    wrapper = ":binary",
 )
 
 toolchain(
