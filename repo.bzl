@@ -45,7 +45,7 @@ def _babashka_impl(repository_ctx):
 
     repository_ctx.template(
         "bin/bb",
-        repository_ctx.attr._wrapper_script_template,
+        repository_ctx.attr._wrapper_template,
         substitutions = {
             "%{repo_root}": repository_ctx.execute(["pwd"]).stdout.strip(),
             "%{raw_binary}": raw_binary,
@@ -75,7 +75,7 @@ babashka = repository_rule(
         "_build_repo_template": attr.label(
             default = "//:BUILD.repo.tpl"
         ),
-        "_wrapper_script_template": attr.label(
+        "_wrapper_template": attr.label(
             default = "//internal:bb.sh.tpl"
         ),
     }
