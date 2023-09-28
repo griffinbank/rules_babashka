@@ -43,12 +43,14 @@ def _babashka_impl(repository_ctx):
         extract_dir = EXTRACT_DIR
     )
 
+    binary_path = "bin/bb"
+
     repository_ctx.template(
-        "bin/bb",
+        binary_path,
         repository_ctx.attr._wrapper_template,
         substitutions = {
             "%{repo_root}": repository_ctx.execute(["pwd"]).stdout.strip(),
-            "%{raw_binary}": raw_binary,
+            "%{workspace_name}": repository_ctx.name,
         },
     )
 
@@ -59,7 +61,7 @@ def _babashka_impl(repository_ctx):
             "%{cpu}": babashka_arch2platform_cpu(arch),
             "%{os}": babashka2platform_os(os),
             "%{raw_binary}": raw_binary,
-            "%{wrapper}": "bin/bb",
+            "%{wrapper}": binary_path,
         },
     )
 

@@ -17,4 +17,4 @@ export CLJ_CONFIG="%{repo_root}/.clojure"
 export DEPS_CLJ_TOOLS_DIR="%{repo_root}/.deps.clj/ClojureTools"
 export GITLIBS="%{repo_root}/.gitlibs"
 
-"$(rlocation rules_babashka/bin/pkg/bb)" -Sdeps "{:mvn/local-repo \"%{repo_root}/.m2/repository\"}" "${@}"
+"$(rlocation %{workspace_name}/bin/pkg/bb)" -Sdeps "{:mvn/local-repo \"%{repo_root}/.m2/repository\"}" "${@}"
