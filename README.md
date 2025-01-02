@@ -19,7 +19,7 @@ http_archive(
 
 load("@rules_babashka//:repo.bzl", "babashka")
 
-BABASHKA_VERSION="1.3.184"
+BABASHKA_VERSION="1.12.196"
 
 babashka(
     name = "babashka-local",
