@@ -2,16 +2,23 @@ load("@rules_babashka//toolchain:toolchain.bzl", "babashka_toolchain")
 
 package(default_visibility=["//visibility:public"])
 
-sh_binary(
+filegroup(
     name = "binary",
+    srcs = ["%{raw_binary}"],
+)
+
+sh_binary(
+    name = "wrapper",
     srcs = ["%{wrapper}"],
-    data = ["%{raw_binary}"],
-    deps = ["@bazel_tools//tools/bash/runfiles"],
+    data = [
+        ":binary",
+        "@bazel_tools//tools/bash/runfiles"
+    ],
 )
 
 babashka_toolchain(
     name = "toolchain_impl",
-    binary = ":binary",
+    binary = ":wrapper",
 )
 
 toolchain(
