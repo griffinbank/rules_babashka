@@ -94,7 +94,7 @@ def _babashka_jar_impl(ctx):
     )
 
     ctx.actions.run_shell(
-        inputs = [ctx.file.bb_edn] + java_toolchain.files.to_list(),
+        inputs = [ctx.file.bb_edn] + ctx.files.srcs + java_toolchain.files.to_list(),
         input_manifests = input_manifests,
         tools = tools,
         outputs = [ctx.outputs.output],
@@ -113,6 +113,7 @@ _babashka_jar = rule(
             allow_single_file = True,
             default = "bb.edn"
         ),
+        "srcs": attr.label_list(allow_files = True),
         "main_ns": attr.string(
             mandatory = True
         ),
