@@ -5,6 +5,7 @@ def _babashka_toolchain_impl(ctx):
         raw_executable = ctx.executable.raw_binary,
         raw_target = ctx.attr.raw_binary,
         runtime_files = ctx.attr.runtime_files,
+        clojure_tools = ctx.attr.clojure_tools,
     )
 
     return [
@@ -17,6 +18,10 @@ babashka_toolchain = rule(
         "binary": attr.label(
             mandatory = True,
             executable = True,
+            cfg = "exec",
+        ),
+        "clojure_tools": attr.label(
+            mandatory = True,
             cfg = "exec",
         ),
         "raw_binary": attr.label(
