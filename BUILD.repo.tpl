@@ -19,6 +19,11 @@ filegroup(
     ),
 )
 
+filegroup(
+    name = "clojure_tools",
+    srcs = glob([".deps.clj/**"]),
+)
+
 sh_binary(
     name = "wrapper",
     srcs = ["%{wrapper}"],
@@ -31,6 +36,7 @@ sh_binary(
 babashka_toolchain(
     name = "toolchain_impl",
     binary = ":wrapper",
+    clojure_tools = ":clojure_tools",
     raw_binary = "%{raw_binary}",
     runtime_files = ":bb_runtime",
 )
